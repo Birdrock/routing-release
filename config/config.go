@@ -15,8 +15,13 @@ type RoutingAPIConfig struct {
 	ClientCertificatePath string `yaml:"client_cert_path"`
 	ClientPrivateKeyPath  string `yaml:"client_private_key_path"`
 	CACertificatePath     string `yaml:"ca_cert_path"`
+
+	ServerCertificatePath   string `yaml:"server_cert_path"`
+	ServerPrivateKeyPath    string `yaml:"server_private_key_path"`
+	ServerCACertificatePath string `yaml:"server_ca_cert_path"`
 }
 
+// UAA config
 type OAuthConfig struct {
 	TokenEndpoint     string `yaml:"token_endpoint"`
 	Port              int    `yaml:"port"`

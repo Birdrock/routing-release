@@ -6,7 +6,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Config", func() {
+var _ = FDescribe("Config", func() {
 
 	Context("when a valid config", func() {
 		It("loads the config", func() {
@@ -27,6 +27,9 @@ var _ = Describe("Config", func() {
 					ClientCertificatePath: "/a/client_cert",
 					ClientPrivateKeyPath:  "/b/private_key",
 					CACertificatePath:     "/c/ca_cert",
+					ServerCertificatePath: "/d/server_cert",
+					ServerPrivateKeyPath: "/e/server_private_key",
+					ServerCACertificatePath: "/f/server_ca_cert",
 				},
 				HaProxyPidFile:               "/path/to/pid/file",
 				IsolationSegments:            []string{"foo-iso-seg"},

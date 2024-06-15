@@ -13,6 +13,9 @@ routing_api:
   client_cert_path: /a/client_cert
   client_private_key_path: /b/private_key
   ca_cert_path: /c/ca_cert
+  server_cert_path: /d/server_cert
+  server_private_key_path: /e/server_private_key
+  server_ca_cert_path: /f/server_ca_cert
 
 haproxy_pid_file: /path/to/pid/file
 isolation_segments: ["foo-iso-seg"]
