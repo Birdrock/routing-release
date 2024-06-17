@@ -737,5 +737,27 @@ var _ = Describe("RoutingTable", func() {
 				Expect(routingTableEntry.Backends).To(HaveLen(2))
 			})
 		})
+
+		Context("when a TLS Port is specified", func() {
+			It("the backendServerKey contains cert and key properties", func() {
+				backendServerInfo := models.BackendServerInfo{
+					Address:           "foo",
+					Port:              uint16(1234),
+					TLSPort:           uint16(1443),
+					ClientCertificate: "cert",
+					ClientKey:         "key",
+					ModificationTag:   modificationTag,
+					TTL:               25,
+				}
+				routingTableEntry := models.NewRoutingTableEntry([]models.BackendServerInfo{backendServerInfo})
+
+				Expect(routingTableEntry.Backends).To(HaveLen(1))
+				for k, _ := range routingTableEntry.Backends {
+					Expect(k.TLSPort).To(Equal(uint16(1443)))
+					Expect(k.ClientCertificate).To(Equal("cert"))
+					Expect(k.ClientKey).To(Equal("key"))
+				}
+			})
+		})
 	})
 })

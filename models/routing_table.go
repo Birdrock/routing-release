@@ -17,15 +17,21 @@ type RoutingKey struct {
 }
 
 type BackendServerInfo struct {
-	Address         string
-	Port            uint16
-	ModificationTag routing_api_models.ModificationTag
-	TTL             int
+	Address           string
+	Port              uint16
+	TLSPort           uint16
+	ClientCertificate string
+	ClientKey         string
+	ModificationTag   routing_api_models.ModificationTag
+	TTL               int
 }
 
 type BackendServerKey struct {
-	Address string
-	Port    uint16
+	Address           string
+	Port              uint16
+	TLSPort           uint16
+	ClientCertificate string
+	ClientKey         string
 }
 
 type BackendServerDetails struct {
@@ -48,7 +54,7 @@ func NewRoutingTableEntry(backends []BackendServerInfo) RoutingTableEntry {
 		Backends: make(map[BackendServerKey]BackendServerDetails),
 	}
 	for _, backend := range backends {
-		backendServerKey := BackendServerKey{Address: backend.Address, Port: backend.Port}
+		backendServerKey := BackendServerKey{Address: backend.Address, Port: backend.Port, TLSPort: backend.TLSPort, ClientCertificate: backend.ClientCertificate, ClientKey: backend.ClientKey}
 		backendServerDetails := BackendServerDetails{ModificationTag: backend.ModificationTag, TTL: backend.TTL, UpdatedTime: time.Now()}
 
 		routingTableEntry.Backends[backendServerKey] = backendServerDetails
@@ -103,12 +109,16 @@ func (d BackendServerDetails) Expired(defaultTTL int) bool {
 	return expiryTime.After(d.UpdatedTime)
 }
 
+// Is this ever used?
 func NewBackendServerInfo(key BackendServerKey, detail BackendServerDetails) BackendServerInfo {
 	return BackendServerInfo{
-		Address:         key.Address,
-		Port:            key.Port,
-		ModificationTag: detail.ModificationTag,
-		TTL:             detail.TTL,
+		Address:           key.Address,
+		Port:              key.Port,
+		TLSPort:           key.TLSPort,
+		ClientCertificate: key.ClientCertificate,
+		ClientKey:         key.ClientKey,
+		ModificationTag:   detail.ModificationTag,
+		TTL:               detail.TTL,
 	}
 }
 

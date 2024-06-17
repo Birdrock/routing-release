@@ -6,6 +6,7 @@ import (
 	"code.cloudfoundry.org/lager/v3/lagertest"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/gbytes"
 )
 
 var _ = Describe("HAProxyConfig", func() {
@@ -159,6 +160,36 @@ var _ = Describe("HAProxyConfig", func() {
 						},
 					},
 				}))
+			})
+		})
+
+		Context("when TLS is enabled", func() {
+			It("uses the TLS Port instead of the non-TLS port", func() {
+				routingTable.Entries[RoutingKey{Port: 80}] = RoutingTableEntry{
+					Backends: map[BackendServerKey]BackendServerDetails{
+						BackendServerKey{Address: "valid-host-1.internal", Port: 2222, TLSPort: 2443}: {},
+						BackendServerKey{Address: "valid-host-1.internal", Port: 1111, TLSPort: 1443}: {},
+					},
+				}
+
+				Expect(NewHAProxyConfig(routingTable, logger)).To(Equal(HAProxyConfig{
+					80: {
+						"": {
+							{Address: "valid-host-1.internal", Port: 1443, TLSPort: 1443},
+							{Address: "valid-host-1.internal", Port: 2443, TLSPort: 2443},
+						},
+					},
+				}))
+			})
+
+			It("logs an error if the TLS Port is 0", func() {
+				routingTable.Entries[RoutingKey{Port: 80}] = RoutingTableEntry{
+					Backends: map[BackendServerKey]BackendServerDetails{
+						BackendServerKey{Address: "valid-host-1.internal", Port: 1111, TLSPort: 0}: {},
+					},
+				}
+
+				Eventually(logger).Should(gbytes.Say("skipping-invalid-routing-table-entry"))
 			})
 		})
 	})

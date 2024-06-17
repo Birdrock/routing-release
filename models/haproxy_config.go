@@ -33,6 +33,14 @@ func NewHAProxyConfig(routingTable RoutingTable, logger lager.Logger) HAProxyCon
 		backends := make(HAProxyBackend, 0)
 
 		for backendKey := range entry.Backends {
+			if backendKey.TLSPort > 0 {
+				backendKey.Port = backendKey.TLSPort
+			}
+
+			if backendKey.TLSPort == 0 {
+				logError(logger, "backend_configuration.tls_port", routingKey, backendKey.TLSPort)
+			}
+
 			if backendKey.Port == 0 {
 				logError(logger, "backend_configuration.port", routingKey, backendKey.Port)
 				continue
