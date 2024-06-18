@@ -196,5 +196,27 @@ backend backend_80
 `))
 			})
 		})
+
+		Context("when a TLSPort is provided", func() {
+			It("configures the backend server to use the TLSPort", func() {
+				haproxyConf = models.HAProxyConfig{
+					80: {
+						"": {
+							{Address: "host-88.internal", Port: 8888, TLSPort: 8443},
+						},
+					},
+				}
+				Expect(marshaller.Marshal(haproxyConf)).To(Equal(`
+frontend frontend_80
+  mode tcp
+  bind :80
+  default_backend backend_80
+
+backend backend_80
+  mode tcp
+  server server_host-88.internal_8443 host-88.internal:8443
+`))
+			})
+		})
 	})
 })

@@ -24,8 +24,10 @@ type BackendServerInfo struct {
 }
 
 type BackendServerKey struct {
-	Address string
-	Port    uint16
+	Address    string
+	Port       uint16
+	TLSPort    uint16
+	InstanceID *string
 }
 
 type BackendServerDetails struct {
