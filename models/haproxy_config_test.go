@@ -6,7 +6,6 @@ import (
 	"code.cloudfoundry.org/lager/v3/lagertest"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"github.com/onsi/gomega/gbytes"
 )
 
 var _ = Describe("HAProxyConfig", func() {
@@ -189,7 +188,7 @@ var _ = Describe("HAProxyConfig", func() {
 					},
 				}
 
-				Eventually(logger).Should(gbytes.Say("skipping-invalid-routing-table-entry"))
+				Eventually(logger).Should(ContainSubstring("skipping-invalid-routing-table-entry"))
 			})
 		})
 	})
