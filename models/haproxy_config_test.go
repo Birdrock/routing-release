@@ -135,14 +135,14 @@ var _ = Describe("HAProxyConfig", func() {
 				instanceId := "foo"
 				routingTable.Entries[RoutingKey{Port: 80}] = RoutingTableEntry{
 					Backends: map[BackendServerKey]BackendServerDetails{
-						BackendServerKey{Address: "valid-host-1.example.com", Port: 1111, TLSPort: 1443, InstanceID: &instanceId}: {},
+						BackendServerKey{Address: "valid-host-1.example.com", Port: 1111, TLSPort: 1443, InstanceID: instanceId}: {},
 					},
 				}
 
 				Expect(NewHAProxyConfig(routingTable, logger)).To(Equal(HAProxyConfig{
 					80: {
 						"": {
-							{Address: "valid-host-1.example.com", Port: 1111, TLSPort: 1443, InstanceID: &instanceId},
+							{Address: "valid-host-1.example.com", Port: 1111, TLSPort: 1443, InstanceID: instanceId},
 						},
 					},
 				}))

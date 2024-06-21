@@ -43,7 +43,7 @@ func NewHAProxyConfig(routingTable RoutingTable, logger lager.Logger) HAProxyCon
 				continue
 			}
 
-			if (backendKey.TLSPort > 0) && (backendKey.InstanceID == nil) {
+			if (backendKey.TLSPort > 0) && (backendKey.InstanceID == "") {
 				logError(logger, "backend_configuration.instance_id", routingKey, "unset")
 				continue
 			}

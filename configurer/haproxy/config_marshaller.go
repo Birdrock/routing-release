@@ -72,7 +72,9 @@ func (cm configMarshaller) marshalHAProxyBackend(backendName string, backend mod
 	var output strings.Builder
 	output.WriteString(fmt.Sprintf("\nbackend %s", backendName))
 	output.WriteString("\n  mode tcp")
-
+	
+	// TODO: This seems to where the tls sni config should be written, but this is all based on HAProxyBackend - so shouldn't the ca/cert/key come in from there?
+	// This suggests the BackendServerKey needs this information.
 	for _, server := range backend {
 		if server.TLSPort > 0 {
 			output.WriteString(fmt.Sprintf("\n  server server_%s_%d %s:%d", server.Address, server.TLSPort, server.Address, server.TLSPort))
